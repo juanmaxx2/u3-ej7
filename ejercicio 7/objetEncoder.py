@@ -1,5 +1,11 @@
 import json
 from pathlib import Path
+from manejador import Manejador
+from personal import Personal 
+from personaldeapoyo import PersonaldeApoyo
+from docente import Docente
+from investigador import Investigador
+from docenteinvestigador import DocenteInvestigador
 class ObjectEncoder(object):
 
     def decodificarDiccionario(self, d):
@@ -10,17 +16,16 @@ class ObjectEncoder(object):
             class_=eval(class_name)
             if class_name=='Manejador':
                 Personal=d['Personal']
-                dPerosnal = Personal[0]
+                dPersonal=Personal[0]
                 manejador=class_()
                 for i in range(len(Personal)):
-                    dPerosnal=Personal[i]
-                    class_name=dPerosnal.pop('__class__')
+                    dPersonal=Personal[i]
+                    class_name=dPersonal.pop('clase')
                     class_=eval(class_name)
-                    atributos=dPerosnal['__atributos__']
-                    personal=class_(**atributos)
-                    manejador.AgregarPersonal(personal)
+                    atributos=dPersonal['atributos']
+                    unPersonal=class_(**atributos)
+                    manejador.AgregarAgente(unPersonal)
             return manejador
-
 
     def guardarJSONArchivo(self, diccionario, archivo):
         with Path(archivo).open("w", encoding="UTF-8") as destino:

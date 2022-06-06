@@ -3,6 +3,7 @@ from personaldeapoyo import PersonaldeApoyo
 from docente import Docente
 from investigador import Investigador
 from docenteinvestigador import DocenteInvestigador
+from personal import Personal
 from lista import Lista
 class Manejador:
     __Lista=None
@@ -52,7 +53,7 @@ class Manejador:
                 Antiguedad=input('Ingrese la antiguedad:')
                 Carrera=input('Ingrese la carrera donde dicta clases:')
                 Cargo=input('Ingrese el cargo:')
-                Catedra=input('Ingrese la catedra:')
+                Catedra=input('Ingrese la catedra:')  
                 AreadeInvestigacion=input('Ingrese el area de Investigacion:')
                 TipodeInvestigacion=input('Ingrese el tipo de Investigacion:')
                 CategoriaProgramaInvestigacion=input('Ingrese la categoria en el programa de incentivos de investigacion:')
@@ -70,11 +71,11 @@ class Manejador:
 
     def MostrarTipo(self,pos):
         self.__Lista.MostrarTipo(pos)
-    
+
     def DICarrera(self,carrera):
         for dato in self.__Lista:
             if isinstance(dato,DocenteInvestigador):
-                if carrera==dato.getCarrera():
+                if carrera==dato.getCatedra():
                     print(dato)
 
     def ContarxArea(self,area):
@@ -100,15 +101,23 @@ class Manejador:
                 j='Docente'
             if isinstance(dato,DocenteInvestigador):
                 j='Docente investigador'
-            print('para el agente: Nombre:{}, Apellido:{}, Tipo de Agente:{}, sueldo:{}'.format(dato.getNombre(), dato.getApellido(),j, dato.getSueldo))
+            print('para el agente: Nombre:{}, Apellido:{}, Tipo de Agente:{}, sueldo:{}'.format(dato.getNombre(), dato.getApellido(),j,dato.getSueldoBasico()))
+        
+    def MostrarCategoria(self,categoria):
+        importe=0
+        for dato in self.__Lista:
+            if isinstance(dato, DocenteInvestigador):
+                if dato.getCategoria().lower()==categoria.lower():
+                    print(dato.getApellido())
+                    print(dato.getNombre())
+                    print(dato.getImporte())
+                    importe+=dato.getImporte()
+        print('El total de dinero que la Secretaría de Investigación debe solicitar al Ministerio es:{}'.format(importe))
 
     def toJSON(self):
         d = dict(
             __class__=self.__class__.__name__,
-            aparatos=[AparatosElectronicos.toJSON() for AparatosElectronicos in self.__lista]
-            )
+            aparatos=[Personal.toJSON() for Personal in self.__Lista]
+        )
         return d
-    
-    def GuardarJSON(self):
-        listaJSON = [AparatosElectronicos.toJSON() for AparatosElectronicos in self.__lista]
-        return listaJSON
+     
